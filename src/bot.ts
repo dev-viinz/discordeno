@@ -24,6 +24,7 @@ import { EventHandlers } from "./types/tebami/event_handlers.ts";
 import { createHelpers, OpenHelpers } from "./helpers/mod.ts";
 import { InteractionCallbackTypes } from "./types/interactions/interaction_callback_types.ts";
 import { createClientTable } from "../cache/client.ts";
+import { devi as token, deviId as botId } from "../tokens.ignore.ts";
 
 type CreateBotOptions = {
   token: string;
@@ -121,8 +122,8 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
 }
 
 const bot = await createBot({
-  token: "",
-  botId: 0n,
+  token,
+  botId,
   intents: [
     GatewayIntents.Guilds,
     GatewayIntents.GuildMembers,
@@ -169,10 +170,10 @@ const bot = await createBot({
       console.log({ res1, res2 });
     },
   },
-  cache: {
-    isAsync: true,
-    customTableCreator: createClientTable,
-  },
+  // cache: {
+  //   isAsync: true,
+  //   customTableCreator: createClientTable,
+  // },
 });
 
 bot.start();
