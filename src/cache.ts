@@ -8,16 +8,19 @@ import { Collection } from "./utils/collection.ts";
 
 export function createCache(
   isAsync: true,
+  // deno-lint-ignore no-explicit-any
   tableCreator: (tableName: TableNames) => AsyncCacheHandler<any>,
 ): AsyncCache;
 export function createCache(
   isAsync: false,
+  // deno-lint-ignore no-explicit-any
   tableCreator?: (tableName: TableNames) => CacheHandler<any>,
 ): Cache;
 export function createCache(
   isAsync: boolean,
   tableCreator?: (
     tableName: TableNames,
+    // deno-lint-ignore no-explicit-any
   ) => CacheHandler<any> | AsyncCacheHandler<any>,
 ): Omit<Cache, "execute"> | Omit<AsyncCache, "execute"> {
   if (isAsync) {
