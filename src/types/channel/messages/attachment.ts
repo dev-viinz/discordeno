@@ -18,6 +18,12 @@ export interface Attachment {
   proxyUrl: string;
   /** Height of file (if image). */
   height?: number | null;
-  /** Width of file (if image.) */
+  /** Width of file (if image). */
   width?: number | null;
+  /**
+   * Whether this attachment is ephemeral.
+   * Ephemeral attachments will automatically be removed after a set period of time.
+   * Ephemeral attachments on messages are guaranteed to be available as long as the message itself exists.
+   */
+  ephemeral?: boolean;
 }
