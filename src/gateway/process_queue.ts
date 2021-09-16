@@ -33,7 +33,7 @@ export async function processQueue(gateway: Gateway, shardId: number) {
     );
 
     // Counter is useful for preventing 120/m requests.
-    shard.queueCounter++;
+    ++shard.queueCounter;
 
     // Handle if the requests have been maxed
     if (shard.queueCounter >= 118) {

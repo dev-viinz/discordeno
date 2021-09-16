@@ -41,7 +41,7 @@ export function createRequestBody(
     for (
       let i = 0;
       i < (queuedRequest.payload.body.file as FileContent[]).length;
-      i++
+      ++i
     ) {
       form.append(
         `file${i}`,

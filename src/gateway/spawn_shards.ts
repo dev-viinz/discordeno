@@ -8,10 +8,10 @@ export function spawnShards(gateway: Gateway, firstShardId = 0) {
   for (
     let index = firstShardId;
     index < gateway.gatewayBot.sessionStartLimit.maxConcurrency;
-    index++
+    ++index
   ) {
     // ORGANIZE ALL SHARDS INTO THEIR OWN BUCKETS
-    for (let i = 0; i < gateway.totalShards; i++) {
+    for (let i = 0; i < gateway.totalShards; ++i) {
       const bucketId = i % gateway.gatewayBot.sessionStartLimit.maxConcurrency;
       const bucket = gateway.buckets.get(bucketId);
 
