@@ -1,8 +1,7 @@
 import { Channel } from "./channel/channel.ts";
 import { Embed } from "./channel/messages/embeds/embed.ts";
 import { Message } from "./channel/messages/message.ts";
-import { Overwrite } from "./channel/overwrite.ts";
-import { BaseInteraction, Interaction } from "./interactions/interaction.ts";
+import { Interaction } from "./interactions/interaction.ts";
 import { User } from "./user/user.ts";
 import { VoiceState } from "./voice/voice_state.ts";
 
