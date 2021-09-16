@@ -111,13 +111,15 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
       // TODO : maybe this is (not) required
       if (data.op !== GatewayOpcodes.Dispatch) return;
       //   if (!messageData.t) return;
-      // `as unknown as Bot` is required because TS says sync functions are not compatible with async ones even though this is irrelevant.
-      bot.handlers[data.t]?.((bot as unknown) as Bot, data, shardId);
+      // `as unknown as Bot` is required because helper functions are missing here this is not important though.
+      bot.handlers[data.t]?.((bot) as unknown as Bot, data, shardId);
     });
 
+  // TODO: this should be done by the gateway function
   // Explicitly append gateway version and encoding
   bot.gateway.gatewayBot.url += `?v=${GATEWAY_VERSION}&encoding=json`;
 
+  // `as unknown as Bot` is required because helper functions are missing here this is not important though.
   return { ...bot, ...createHelpers((bot as unknown) as Bot) };
 }
 
@@ -220,7 +222,7 @@ bot.start();
 
 // console.log(res);
 
-export interface Bot<C extends Cache | AsyncCache = AsyncCache>
+export interface Bot<C extends Cache | AsyncCache = AsyncCache | Cache>
   extends OpenHelpers {
   id: bigint;
   applicationId: bigint;
@@ -242,6 +244,7 @@ export interface Bot<C extends Cache | AsyncCache = AsyncCache>
   fetch: <T>(
     method: Methods,
     url: string,
+    // deno-lint-ignore ban-types
     body?: {},
     transformer?: (data: ToDiscordType<T>) => T,
   ) => Promise<T>;
