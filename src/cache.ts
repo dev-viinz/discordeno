@@ -110,11 +110,13 @@ export interface CacheHandler<T> {
   set(key: Snowflake, data: T): boolean;
   /** Get a stored item from the table. */
   get(key: Snowflake): T | undefined;
+  // TODO: maybe its possible to stringify the function and send it to the custom cache handler :thinking:
   /**
    * Loop over each entry and execute callback function.
    * @important This function NOT optimised and will force load everything when using custom cache.
    */
   forEach(callback: (value: T, key: Snowflake) => unknown): void;
+  // TODO: maybe its possible to stringify the function and send it to the custom cache handler :thinking:
   /**
    * Loop over each entry and execute callback function.
    * @important This function NOT optimised and will force load everything when using custom cache.
