@@ -216,15 +216,14 @@ export class Collection<K, V> extends Map<K, V> {
     this.maxSize = options?.maxSize;
   }
 
-  // @ts-ignore
+  // @ts-ignore - we want to return a boolean here
   set(key: K, value: V): boolean {
     // When this collection is maxSizeed make sure we can add first
-    if ((this.maxSize || this.maxSize === 0) && this.size >= this.maxSize) {
+    if ((this.maxSize !== undefined) && this.size >= this.maxSize) {
       return false;
     }
 
-    super.set(key, value);
-    return true;
+    return !!super.set(key, value);
   }
 
   array() {
