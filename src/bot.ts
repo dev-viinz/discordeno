@@ -3,17 +3,7 @@ import { createGateway } from "./gateway/mod.ts";
 import { GatewayIntents } from "./types/gateway/gateway_intents.ts";
 import { Methods, Rest } from "./rest/types.ts";
 import { createRest } from "./rest/rest.ts";
-import { Components } from "./utils/components.ts";
-import { Snowflake } from "./types/base.ts";
-import { Collection } from "./utils/collection.ts";
-import { Channel, TebamiThread } from "./types/channel/channel.ts";
-import { TebamiUser } from "./types/user/user.ts";
-import { TebamiGuild } from "./types/guild/guild.ts";
-import { Message } from "./types/channel/messages/message.ts";
-import {
-  GatewayPresenceUpdateData,
-  GatewayReceivePayload,
-} from "./types/gateway/gateway_payload.ts";
+import { GatewayReceivePayload } from "./types/gateway/gateway_payload.ts";
 import { createTransformers, Transformers } from "./transformers/mod.ts";
 import { Handlers } from "./handlers/mod.ts";
 import { createHandlers } from "./handlers/mod.ts";
@@ -23,21 +13,39 @@ import { GatewayOpcodes } from "./types/codes/gateway_opcodes.ts";
 import { EventHandlers } from "./types/tebami/event_handlers.ts";
 import { createHelpers, OpenHelpers } from "./helpers/mod.ts";
 import { InteractionCallbackTypes } from "./types/interactions/interaction_callback_types.ts";
-import { createClientTable } from "../cache/client.ts";
 import { devi as token, deviId as botId } from "../tokens.ignore.ts";
+import {
+  AsyncCache,
+  AsyncCacheHandler,
+  Cache,
+  CacheExecutor,
+  CacheHandler,
+  createCache,
+  createExecute,
+  TableNames,
+} from "./cache.ts";
 
 type CreateBotOptions = {
+  /** The Authorization token of your bot. */
   token: string;
+  /** The intents you want to use for the bots gateway. */
   intents?: (ValueOf<typeof GatewayIntents> | keyof typeof GatewayIntents)[];
+  /** The id of the bot. */
   botId: bigint;
+  /**
+   * The application id of the bot.
+   * Usually the botId but for old applications its different.
+   */
   applicationId?: bigint;
   cache?:
     | {
       isAsync: true;
+      // deno-lint-ignore no-explicit-any
       customTableCreator: (tableName: TableNames) => AsyncCacheHandler<any>;
     }
     | {
       isAsync: false;
+      // deno-lint-ignore no-explicit-any
       customTableCreator: (tableName: TableNames) => CacheHandler<any>;
     };
   /** The final function which gets executed on an on message event. */
@@ -99,6 +107,7 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
     isReady: false,
 
     fetch: async function (method, url, body, transformer) {
+      // deno-lint-ignore no-explicit-any
       const res = await rest.runMethod<any>(rest, method, url, body);
       return res && transformer ? transformer(res) : res;
     },
@@ -136,11 +145,11 @@ const bot = await createBot({
       console.log("I AM READYYY");
       console.log("Ready with", await bot.cache.guilds.size(), "guilds");
     },
-    shardFailedToLoad() {
-      console.log("WTF");
+    shardFailedToLoad(shardId, guildIds) {
+      console.log("[SHARD FAILED TO LOAD]", shardId, guildIds.size);
     },
-    shardReady() {
-      console.log("A SHARD IS REAADY");
+    shardReady(shardId) {
+      console.log("[SHARD READY]", shardId);
     },
     channelCreate(channel) {
       console.log("A channel has been created", { channel });
@@ -249,154 +258,3 @@ export interface Bot<C extends Cache | AsyncCache = AsyncCache | Cache>
     transformer?: (data: ToDiscordType<T>) => T,
   ) => Promise<T>;
 }
-
-function createCache(
-  isAsync: true,
-  tableCreator: (tableName: TableNames) => AsyncCacheHandler<any>,
-): AsyncCache;
-function createCache(
-  isAsync: false,
-  tableCreator?: (tableName: TableNames) => CacheHandler<any>,
-): Cache;
-function createCache(
-  isAsync: boolean,
-  tableCreator?: (
-    tableName: TableNames,
-  ) => CacheHandler<any> | AsyncCacheHandler<any>,
-): Omit<Cache, "execute"> | Omit<AsyncCache, "execute"> {
-  if (isAsync) {
-    if (!tableCreator) {
-      throw new Error("Async cache requires a tableCreator to be passed.");
-    }
-
-    return {
-      guilds: tableCreator("guilds"),
-      users: tableCreator("users"),
-      channels: tableCreator("channels"),
-      messages: tableCreator("messages"),
-      presences: tableCreator("presences"),
-      threads: tableCreator("threads"),
-      unavailableGuilds: tableCreator("unavailableGuilds"),
-      executedSlashCommands: new Set(),
-    } as AsyncCache;
-  }
-  if (!tableCreator) tableCreator = createTable;
-
-  return {
-    guilds: tableCreator("guilds"),
-    users: tableCreator("users"),
-    channels: tableCreator("channels"),
-    messages: tableCreator("messages"),
-    presences: tableCreator("presences"),
-    threads: tableCreator("threads"),
-    unavailableGuilds: tableCreator("unavailableGuilds"),
-    executedSlashCommands: new Set(),
-  } as Cache;
-}
-
-interface Cache {
-  guilds: CacheHandler<TebamiGuild>;
-  users: CacheHandler<TebamiUser>;
-  channels: CacheHandler<Channel>;
-  messages: CacheHandler<Message>;
-  presences: CacheHandler<GatewayPresenceUpdateData>;
-  threads: CacheHandler<TebamiThread>;
-  unavailableGuilds: CacheHandler<CachedUnavailableGuild>;
-  executedSlashCommands: Set<Snowflake>;
-  execute: CacheExecutor;
-}
-
-export interface CachedUnavailableGuild {
-  shardId: number;
-  since: number;
-  dispatched?: true;
-}
-
-interface AsyncCache {
-  guilds: AsyncCacheHandler<TebamiGuild>;
-  users: AsyncCacheHandler<TebamiUser>;
-  channels: AsyncCacheHandler<Channel>;
-  messages: AsyncCacheHandler<Message>;
-  presences: AsyncCacheHandler<GatewayPresenceUpdateData>;
-  threads: AsyncCacheHandler<TebamiThread>;
-  unavailableGuilds: AsyncCacheHandler<CachedUnavailableGuild>;
-  executedSlashCommands: Set<Snowflake>;
-  execute: CacheExecutor;
-}
-
-function createTable<T>(_table: TableNames): CacheHandler<T> {
-  const table = new Collection<Snowflake, T>();
-  return {
-    clear: () => table.clear(),
-    delete: (key) => table.delete(key),
-    has: (key) => table.has(key),
-    size: () => table.size,
-    set: (key, data) => table.set(key, data),
-    get: (key) => table.get(key),
-    forEach: (callback) => table.forEach(callback),
-    filter: (callback) => table.filter(callback),
-  };
-}
-
-export interface CacheHandler<T> {
-  /** Completely empty this table. */
-  clear(): void;
-  /** Delete the data related to this key from table. */
-  delete(key: Snowflake): boolean;
-  /** Check if there is data assigned to this key. */
-  has(key: Snowflake): boolean;
-  /** Check how many items are stored in this table. */
-  size(): number;
-  /** Store new data to this table. */
-  set(key: Snowflake, data: T): boolean;
-  /** Get a stored item from the table. */
-  get(key: Snowflake): T | undefined;
-  /**
-   * Loop over each entry and execute callback function.
-   * @important This function NOT optimised and will force load everything when using custom cache.
-   */
-  forEach(callback: (value: T, key: Snowflake) => unknown): void;
-  /**
-   * Loop over each entry and execute callback function.
-   * @important This function NOT optimised and will force load everything when using custom cache.
-   */
-  filter(
-    callback: (value: T, key: Snowflake) => boolean,
-  ): Collection<Snowflake, T>;
-}
-
-export type AsyncCacheHandler<T> = {
-  [K in keyof CacheHandler<T>]: (
-    ...args: Parameters<CacheHandler<T>[K]>
-  ) => Promise<ReturnType<CacheHandler<T>[K]>>;
-};
-
-interface CacheExecutor {
-  (
-    type: "DELETE_MESSAGES_FROM_CHANNEL",
-    options: { channelId: bigint },
-  ): Promise<undefined>;
-}
-
-function createExecute(cache: Cache | AsyncCache): CacheExecutor {
-  return async (type, options) => {
-    if (type === "DELETE_MESSAGES_FROM_CHANNEL") {
-      await cache.messages.forEach(async (message) => {
-        if (message.channelId === options.channelId) {
-          await cache.messages.delete(message.id);
-        }
-      });
-
-      return undefined;
-    }
-  };
-}
-
-type TableNames =
-  | "channels"
-  | "users"
-  | "guilds"
-  | "messages"
-  | "presences"
-  | "threads"
-  | "unavailableGuilds";
