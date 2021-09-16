@@ -62,13 +62,13 @@ export interface SelectOption {
   /** `name`, `id` and `animated`. */
   emoji?:
     | {
-        id: bigint;
-        name: string;
-        animated?: boolean;
-      }
+      id: bigint;
+      name: string;
+      animated?: boolean;
+    }
     | {
-        name: string;
-      };
+      name: string;
+    };
   /** Will render this option as already-selected by default. */
   default?: boolean;
 }

@@ -12,10 +12,9 @@ export function transformChannel(channel: ToDiscordType<Channel>): Channel {
     type: channel.type,
     guildId: channel.guild_id ? BigInt(channel.guild_id) : 0n,
     position: channel.position,
-    permissionOverwrites:
-      channel.permission_overwrites?.map((overwrite) =>
-        transformOverwrite(overwrite)
-      ) ?? [],
+    permissionOverwrites: channel.permission_overwrites?.map((overwrite) =>
+      transformOverwrite(overwrite)
+    ) ?? [],
     name: channel.name,
     topic: channel.topic,
     nsfw: channel.nsfw,

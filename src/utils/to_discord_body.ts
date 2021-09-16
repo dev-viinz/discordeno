@@ -21,13 +21,13 @@ function isConvertableObject(obj: unknown): obj is Record<string, unknown> {
 
 export function toDiscordBody<T>(
   obj: // deno-lint-ignore no-explicit-any
-  | Record<string, any>
+    | Record<string, any>
     // deno-lint-ignore no-explicit-any
     | Record<string, any>[]
     | bigint
     | string
     | number
-    | boolean
+    | boolean,
 ): T {
   if (isConvertableObject(obj)) {
     // deno-lint-ignore no-explicit-any

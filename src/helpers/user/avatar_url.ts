@@ -10,13 +10,13 @@ import { iconBigintToHash } from "../../utils/hash.ts";
 export function avatarUrl(
   _: Bot,
   user: Pick<User, "id" | "discriminator" | "avatar">,
-  options?: { size?: DiscordImageSize; format?: DiscordImageFormat }
+  options?: { size?: DiscordImageSize; format?: DiscordImageFormat },
 ): string {
   return user.avatar
     ? formatImageUrl(
-        endpoints.USER_AVATAR(user.id, iconBigintToHash(user.avatar)),
-        options?.size || 128,
-        options?.format
-      )
+      endpoints.USER_AVATAR(user.id, iconBigintToHash(user.avatar)),
+      options?.size || 128,
+      options?.format,
+    )
     : endpoints.USER_DEFAULT_AVATAR(Number(user.discriminator) % 5);
 }

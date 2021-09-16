@@ -7,7 +7,7 @@ import { ToDiscordType } from "../../types/utils.ts";
 export default function handleReady(
   bot: Bot,
   data: ToDiscordType<GatewayDispatchPayload>,
-  shardId: number
+  shardId: number,
 ) {
   if (data.t !== GatewayDispatchEvents.Ready) return;
 

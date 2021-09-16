@@ -66,12 +66,11 @@ export class Embeds extends Array<Embed> {
   }
 
   setColor(color: string) {
-    this.#getLastEmbed().color =
-      color.toLowerCase() === `random`
-        ? // Random color
-          Math.floor(Math.random() * (0xffffff + 1))
-        : // Convert the hex to a acceptable color for discord
-          parseInt(color.replace("#", ""), 16);
+    this.#getLastEmbed().color = color.toLowerCase() === `random`
+      ? // Random color
+        Math.floor(Math.random() * (0xffffff + 1))
+      : // Convert the hex to a acceptable color for discord
+        parseInt(color.replace("#", ""), 16);
 
     return this;
   }
@@ -80,7 +79,7 @@ export class Embeds extends Array<Embed> {
     if (Array.isArray(description)) description = description.join("\n");
     this.#getLastEmbed().description = this.fitData(
       description,
-      embedLimits.description
+      embedLimits.description,
     );
 
     return this;
@@ -124,9 +123,9 @@ export class Embeds extends Array<Embed> {
   }
 
   setImage(urlOrUser: string | User) {
-    if (typeof urlOrUser === "string")
+    if (typeof urlOrUser === "string") {
       this.#getLastEmbed().image = { url: urlOrUser };
-    else {
+    } else {
       this.#getLastEmbed().image = {
         url: avatarUrl(urlOrUser, {
           size: 2048,

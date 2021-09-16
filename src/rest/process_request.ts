@@ -5,7 +5,7 @@ import { Rest, RestPayload, RestRequest } from "./types.ts";
 export async function processRequest(
   rest: Rest,
   request: RestRequest,
-  payload: RestPayload
+  payload: RestPayload,
 ): Promise<void> {
   const route = request.url.substring(request.url.indexOf("api/"));
   const parts = route.split("/");

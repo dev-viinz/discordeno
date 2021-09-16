@@ -8,7 +8,7 @@ import transformMessage from "../channel/message.transformer.ts";
 import transformMessageComponentData from "./message_component_data.transformer.ts";
 
 export function transformInteraction(
-  data: ToDiscordType<Interaction>
+  data: ToDiscordType<Interaction>,
 ): Interaction {
   switch (data.type) {
     case InteractionTypes.ApplicationCommand:

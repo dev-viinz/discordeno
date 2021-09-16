@@ -17,23 +17,23 @@ import transformInteraction from "./interactions/interaction.transformer.ts";
 import transformMessageComponentData from "./interactions/message_component_data.transformer.ts";
 
 export {
-  transformChannel,
-  transformOverwrite,
-  transformThreadMember,
-  transformThreadMetadata,
-  transformGatewayBot,
-  transformUser,
-  transformSticker,
-  transformRole,
-  transformGuild,
-  transformEmoji,
-  transformThread,
-  transformInteraction,
-  transformMessage,
-  transformGuildMember,
   transformApplicationCommandInteractionData,
   transformApplicationResolvedData,
+  transformChannel,
+  transformEmoji,
+  transformGatewayBot,
+  transformGuild,
+  transformGuildMember,
+  transformInteraction,
+  transformMessage,
   transformMessageComponentData,
+  transformOverwrite,
+  transformRole,
+  transformSticker,
+  transformThread,
+  transformThreadMember,
+  transformThreadMetadata,
+  transformUser,
 };
 
 const transformers = {
@@ -57,7 +57,7 @@ const transformers = {
 };
 
 export function createTransformers(
-  customTransformers?: Transformers
+  customTransformers?: Transformers,
 ): Transformers {
   return { ...transformers, ...customTransformers };
 }

@@ -1,8 +1,8 @@
 import { ButtonStyles } from "../types/interactions/message_components/buton_styles.ts";
 import {
   ActionRow,
-  SelectOption,
   ButtonComponent,
+  SelectOption,
 } from "../types/interactions/message_components/component.ts";
 import { ComponentTypes } from "../types/interactions/message_components/component_types.ts";
 import { SNOWFLAKE_REGEX } from "./constants.ts";
@@ -29,7 +29,7 @@ export class Components extends Array<ActionRow> {
     placeholder: string,
     customId: string,
     selectOptions: SelectOption[],
-    options?: { minValues?: number; maxValues?: number }
+    options?: { minValues?: number; maxValues?: number },
   ) {
     // No Action Row has been created so do it
     if (!this.length) this.addActionRow();
@@ -65,7 +65,7 @@ export class Components extends Array<ActionRow> {
     options?: {
       emoji?: string | { name: string; id?: bigint; animated?: boolean };
       disabled?: boolean;
-    }
+    },
   ) {
     // No Action Row has been created so do it
     if (!this.length) this.addActionRow();
@@ -85,8 +85,9 @@ export class Components extends Array<ActionRow> {
       if (
         row.components.length === 5 ||
         row.components[0]?.type === ComponentTypes.SelectMenu
-      )
+      ) {
         return this;
+      }
     }
 
     row.components.push({
@@ -103,7 +104,7 @@ export class Components extends Array<ActionRow> {
   }
 
   #stringToEmoji(
-    emoji?: string | { name: string; id?: bigint; animated?: boolean }
+    emoji?: string | { name: string; id?: bigint; animated?: boolean },
   ): { name: string; id?: bigint; animated?: boolean } | undefined {
     if (typeof emoji !== "string") return emoji;
 
@@ -114,7 +115,7 @@ export class Components extends Array<ActionRow> {
       const animated = emoji.startsWith("<a:");
       const name = emoji.substring(
         emoji.indexOf(":") + 1,
-        emoji.lastIndexOf(":")
+        emoji.lastIndexOf(":"),
       );
       const id = emoji.match(SNOWFLAKE_REGEX)![0];
 

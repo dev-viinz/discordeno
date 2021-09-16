@@ -1,4 +1,4 @@
-import { ExtensionCodec, encode, decode, DecodeError } from "./deps.ts";
+import { decode, DecodeError, encode, ExtensionCodec } from "./deps.ts";
 
 export const extensionCodec = new ExtensionCodec();
 extensionCodec.register({

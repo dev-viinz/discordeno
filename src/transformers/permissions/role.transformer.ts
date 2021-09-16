@@ -13,12 +13,12 @@ export function transformRole(role: ToDiscordType<Role>): Role {
     mentionable: role.mentionable,
     tags: role.tags
       ? {
-          botId: role.tags.bot_id ? BigInt(role.tags.bot_id) : undefined,
-          integrationId: role.tags.integration_id
-            ? BigInt(role.tags.integration_id)
-            : undefined,
-          premiumSubscriber: role.tags.premium_subscriber === null,
-        }
+        botId: role.tags.bot_id ? BigInt(role.tags.bot_id) : undefined,
+        integrationId: role.tags.integration_id
+          ? BigInt(role.tags.integration_id)
+          : undefined,
+        premiumSubscriber: role.tags.premium_subscriber === null,
+      }
       : undefined,
   };
 }

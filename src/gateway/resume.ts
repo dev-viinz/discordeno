@@ -10,7 +10,7 @@ export function resume(gateway: Gateway, shardId: number) {
     gateway.closeWebSocket(
       oldShard.socket,
       3064,
-      "Resuming the shard, closing old shard."
+      "Resuming the shard, closing old shard.",
     );
     // STOP OLD HEARTBEAT
     clearInterval(oldShard.heartbeat.intervalId);
@@ -29,7 +29,7 @@ export function resume(gateway: Gateway, shardId: number) {
           seq: previousSequenceNumber,
         },
       },
-      true
+      true,
     );
   });
 

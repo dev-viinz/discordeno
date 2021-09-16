@@ -1,8 +1,8 @@
 export {
-  ExtensionCodec,
-  encode,
   decode,
   DecodeError,
+  encode,
+  ExtensionCodec,
 } from "https://cdn.skypack.dev/@msgpack/msgpack?dts";
 
 export {

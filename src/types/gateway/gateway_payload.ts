@@ -51,15 +51,17 @@ interface DispatchPayload<Event extends GatewayDispatchEvents, D = unknown>
   d: D;
 }
 
-type NonDispatchPayload<OP extends GatewayOpcodes, D = unknown> = Omit<
-  BasePayload<OP>,
-  "t"
-> & {
-  /**
-   * Event data
-   */
-  d: D;
-};
+type NonDispatchPayload<OP extends GatewayOpcodes, D = unknown> =
+  & Omit<
+    BasePayload<OP>,
+    "t"
+  >
+  & {
+    /**
+     * Event data
+     */
+    d: D;
+  };
 
 /**
  * https://discord.com/developers/docs/topics/gateway#hello

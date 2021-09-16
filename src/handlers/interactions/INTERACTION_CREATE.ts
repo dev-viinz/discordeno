@@ -5,11 +5,11 @@ import { ToDiscordType } from "../../types/utils.ts";
 
 export default function handleInteractionCreate(
   bot: Bot,
-  data: ToDiscordType<GatewayDispatchPayload>
+  data: ToDiscordType<GatewayDispatchPayload>,
 ) {
   if (data.t !== GatewayDispatchEvents.InteractionCreate) return;
 
   bot.eventHandlers.interactionCreate?.(
-    bot.transformers.transformInteraction(data.d)
+    bot.transformers.transformInteraction(data.d),
   );
 }

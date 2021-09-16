@@ -8,7 +8,7 @@ export async function sendInteractionResponse(
   bot: Bot,
   id: Snowflake,
   token: string,
-  options: InteractionResponse
+  options: InteractionResponse,
 ): Promise<undefined | Message> {
   // TODO: add more options validations
   // if (options.data?.components) validateComponents(options.data?.components);
@@ -24,7 +24,7 @@ export async function sendInteractionResponse(
       "POST",
       endpoints.WEBHOOK(bot.applicationId, token),
       options.data,
-      bot.transformers.transformMessage
+      bot.transformers.transformMessage,
     );
   }
 
@@ -35,6 +35,6 @@ export async function sendInteractionResponse(
   return await bot.fetch(
     "POST",
     endpoints.INTERACTION_ID_TOKEN(id, token),
-    options
+    options,
   );
 }

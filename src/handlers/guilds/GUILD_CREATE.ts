@@ -7,7 +7,7 @@ import { guildAvailable } from "../misc/READY.ts";
 export default async function handleGuildCreate(
   bot: Bot,
   data: ToDiscordType<GatewayDispatchPayload>,
-  shardId: number
+  shardId: number,
 ) {
   if (data.t !== GatewayDispatchEvents.GuildCreate) return;
 
@@ -16,8 +16,9 @@ export default async function handleGuildCreate(
   if (
     (await bot.cache.guilds.has(BigInt(payload.id))) ||
     (await bot.cache.unavailableGuilds.get(BigInt(payload.id)))?.dispatched
-  )
+  ) {
     return;
+  }
 
   const guild = bot.transformers.transformGuild(payload);
   Promise.all(
@@ -28,18 +29,18 @@ export default async function handleGuildCreate(
           bot.transformers.transformChannel({
             ...channel,
             guild_id: payload.id,
-          })
-        )
-    )
+          }),
+        ),
+    ),
   );
   Promise.all(
     payload.threads.map(
       async (thread) =>
         await bot.cache.threads.set(
           BigInt(thread.id),
-          bot.transformers.transformThread(thread)
-        )
-    )
+          bot.transformers.transformThread(thread),
+        ),
+    ),
   );
   // TODO : good way to cache users
   // TODO: good way to cache presences

@@ -10,15 +10,17 @@ export async function handleOnMessage(
   gateway: Gateway,
   // deno-lint-ignore no-explicit-any
   message: any,
-  shardId: number
+  shardId: number,
 ) {
   if (message instanceof ArrayBuffer) {
     message = new Uint8Array(message);
   }
 
   if (message instanceof Uint8Array) {
-    message = decompressWith(message, 0, (slice: Uint8Array) =>
-      gateway.utf8decoder.decode(slice)
+    message = decompressWith(
+      message,
+      0,
+      (slice: Uint8Array) => gateway.utf8decoder.decode(slice),
     );
   }
 
@@ -28,7 +30,7 @@ export async function handleOnMessage(
   const shard = gateway.shards.get(shardId);
 
   const messageData = JSON.parse(
-    message
+    message,
   ) as ToDiscordType<GatewayReceivePayload>;
   // ws.log("RAW", { shardId, payload: messageData });
 
@@ -45,7 +47,7 @@ export async function handleOnMessage(
           op: GatewayOpcodes.Heartbeat,
           d: shard?.previousSequenceNumber,
         },
-        true
+        true,
       );
       break;
     case GatewayOpcodes.Hello:
@@ -106,7 +108,7 @@ export async function handleOnMessage(
         // Wait few seconds to spawn next shard
         setTimeout(() => {
           const bucket = gateway.buckets.get(
-            shardId % gateway.gatewayBot.sessionStartLimit.maxConcurrency
+            shardId % gateway.gatewayBot.sessionStartLimit.maxConcurrency,
           );
           if (bucket) bucket.createNextShard.shift()?.();
         }, gateway.spawnShardDelay);

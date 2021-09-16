@@ -6,7 +6,7 @@ import { InteractionTypes } from "../../../types/interactions/interaction_types.
 import { ToDiscordType } from "../../../types/utils.ts";
 
 export function isComponentInteraction(
-  interaction: Interaction | ToDiscordType<Interaction>
+  interaction: Interaction | ToDiscordType<Interaction>,
 ): interaction is ComponentInteraction {
   return interaction.type === InteractionTypes.MessageComponent;
 }

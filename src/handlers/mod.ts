@@ -14,7 +14,7 @@ export const handlers: {
   [K in GatewayDispatchPayload["t"]]: (
     bot: Bot,
     data: ToDiscordType<GatewayDispatchPayload>,
-    shardId: number
+    shardId: number,
   ) => unknown;
 } = {
   CHANNEL_CREATE,

@@ -4,7 +4,7 @@
 export function hasProperty<
   // deno-lint-ignore ban-types
   T extends {},
-  Y extends PropertyKey = string
+  Y extends PropertyKey = string,
 >(obj: T, prop: Y): obj is T & Record<Y, unknown> {
   // deno-lint-ignore no-prototype-builtins
   return obj.hasOwnProperty(prop);

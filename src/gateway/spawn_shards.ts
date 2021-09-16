@@ -31,7 +31,7 @@ export function spawnShards(gateway: Gateway, firstShardId = 0) {
     for (const shardId of bucket.shards) {
       bucket.createNextShard.push(
         async () =>
-          await gateway.requestShardIdentify(gateway, shardId, bucketId)
+          await gateway.requestShardIdentify(gateway, shardId, bucketId),
       );
     }
 

@@ -9,7 +9,7 @@ import transformUser from "../user/user.transformer.ts";
 import transformOverwrite from "../channel/overwrite.transformer.ts";
 
 export function transformApplicationCommandResolvedData(
-  data: ToDiscordType<ApplicationCommandResolvedData>
+  data: ToDiscordType<ApplicationCommandResolvedData>,
 ): ApplicationCommandResolvedData {
   // TODO: transform messages
   const messages = {};

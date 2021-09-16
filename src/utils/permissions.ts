@@ -2,25 +2,24 @@ import { TebamiGuild } from "../types/guild/guild.ts";
 
 async function getCached(
   table: "guilds",
-  key: bigint | TebamiGuild
+  key: bigint | TebamiGuild,
 ): Promise<TebamiGuild | undefined>;
 async function getCached(
   table: "channels",
-  key: bigint | TebamiChannel
+  key: bigint | TebamiChannel,
 ): Promise<TebamiChannel | undefined>;
 async function getCached(
   table: "members",
-  key: bigint | TebamiUser
+  key: bigint | TebamiUser,
 ): Promise<TebamiUser | undefined>;
 async function getCached(
   table: "guilds" | "channels" | "members",
-  key: bigint | TebamiGuild | TebamiChannel | TebamiUser
+  key: bigint | TebamiGuild | TebamiChannel | TebamiUser,
 ) {
-  const cached =
-    typeof key === "bigint"
-      ? // @ts-ignore TS is wrong here
-        await cacheHandlers.get(table, key)
-      : key;
+  const cached = typeof key === "bigint"
+    ? // @ts-ignore TS is wrong here
+      await cacheHandlers.get(table, key)
+    : key;
 
   return typeof cached === "bigint" ? undefined : cached;
 }
@@ -28,7 +27,7 @@ async function getCached(
 /** Calculates the permissions this member has in the given guild */
 export async function calculateBasePermissions(
   guildOrId: bigint | TebamiGuild,
-  memberOrId: bigint | TebamiUser
+  memberOrId: bigint | TebamiUser,
 ) {
   const guild = await getCached("guilds", guildOrId);
   const member = await getCached("members", memberOrId);
@@ -37,15 +36,14 @@ export async function calculateBasePermissions(
 
   let permissions = 0n;
   // Calculate the role permissions bits, @everyone role is not in memberRoleIds so we need to pass guildId manualy
-  permissions |=
-    [...(member.guilds.get(guild.id)?.roles || []), guild.id]
-      .map((id) => guild.roles.get(id)?.permissions)
-      // Removes any edge case undefined
-      .filter((perm) => perm)
-      .reduce((bits, perms) => {
-        bits! |= perms!;
-        return bits;
-      }, 0n) || 0n;
+  permissions |= [...(member.guilds.get(guild.id)?.roles || []), guild.id]
+    .map((id) => guild.roles.get(id)?.permissions)
+    // Removes any edge case undefined
+    .filter((perm) => perm)
+    .reduce((bits, perms) => {
+      bits! |= perms!;
+      return bits;
+    }, 0n) || 0n;
 
   // If the memberId is equal to the guild ownerId he automatically has every permission so we add ADMINISTRATOR permission
   if (guild.ownerId === member.id) permissions |= 8n;
@@ -56,7 +54,7 @@ export async function calculateBasePermissions(
 /** Calculates the permissions this member has for the given Channel */
 export async function calculateChannelOverwrites(
   channelOrId: bigint | TebamiChannel,
-  memberOrId: bigint | TebamiUser
+  memberOrId: bigint | TebamiUser,
 ) {
   const channel = await getCached("channels", channelOrId);
 
@@ -72,7 +70,7 @@ export async function calculateChannelOverwrites(
 
   // First calculate @everyone overwrites since these have the lowest priority
   const overwriteEveryone = channel.permissionOverwrites?.find(
-    (overwrite) => overwrite.id === channel.guildId
+    (overwrite) => overwrite.id === channel.guildId,
   );
   if (overwriteEveryone) {
     // First remove denied permissions since denied < allowed
@@ -99,7 +97,7 @@ export async function calculateChannelOverwrites(
 
   // Third calculate member specific overwrites since these have the highest priority
   const overwriteMember = overwrites?.find(
-    (overwrite) => overwrite.id === member.id
+    (overwrite) => overwrite.id === member.id,
   );
   if (overwriteMember) {
     permissions &= ~overwriteMember.deny;
@@ -112,14 +110,14 @@ export async function calculateChannelOverwrites(
 /** Checks if the given permission bits are matching the given permissions. `ADMINISTRATOR` always returns `true` */
 export function validatePermissions(
   permissionBits: bigint,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   if (permissionBits & 8n) return true;
 
   return permissions.every(
     (permission) =>
       // Check if permission is in permissionBits
-      permissionBits & BigInt(DiscordBitwisePermissionFlags[permission])
+      permissionBits & BigInt(DiscordBitwisePermissionFlags[permission]),
   );
 }
 
@@ -127,7 +125,7 @@ export function validatePermissions(
 export async function hasGuildPermissions(
   guild: bigint | TebamiGuild,
   member: bigint | TebamiUser,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // First we need the role permission bits this member has
   const basePermissions = await calculateBasePermissions(guild, member);
@@ -138,7 +136,7 @@ export async function hasGuildPermissions(
 /** Checks if the bot has these permissions in the given guild */
 export function botHasGuildPermissions(
   guild: bigint | TebamiGuild,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // Since Bot is a normal member we can use the hasRolePermissions() function
   return hasGuildPermissions(guild, botId, permissions);
@@ -148,7 +146,7 @@ export function botHasGuildPermissions(
 export async function hasChannelPermissions(
   channel: bigint | TebamiChannel,
   member: bigint | TebamiUser,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // First we need the overwrite bits this member has
   const channelOverwrites = await calculateChannelOverwrites(channel, member);
@@ -159,7 +157,7 @@ export async function hasChannelPermissions(
 /** Checks if the bot has these permissions f0r the given channel */
 export function botHasChannelPermissions(
   channel: bigint | TebamiChannel,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // Since Bot is a normal member we can use the hasRolePermissions() function
   return hasChannelPermissions(channel, botId, permissions);
@@ -168,13 +166,13 @@ export function botHasChannelPermissions(
 /** Returns the permissions that are not in the given permissionBits */
 export function missingPermissions(
   permissionBits: bigint,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   if (permissionBits & 8n) return [];
 
   return permissions.filter(
     (permission) =>
-      !(permissionBits & BigInt(DiscordBitwisePermissionFlags[permission]))
+      !(permissionBits & BigInt(DiscordBitwisePermissionFlags[permission])),
   );
 }
 
@@ -182,7 +180,7 @@ export function missingPermissions(
 export async function getMissingGuildPermissions(
   guild: bigint | TebamiGuild,
   member: bigint | TebamiUser,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // First we need the role permission bits this member has
   const permissionBits = await calculateBasePermissions(guild, member);
@@ -194,7 +192,7 @@ export async function getMissingGuildPermissions(
 export async function getMissingChannelPermissions(
   channel: bigint | TebamiChannel,
   member: bigint | TebamiUser,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // First we need the role permissino bits this member has
   const permissionBits = await calculateChannelOverwrites(channel, member);
@@ -206,7 +204,7 @@ export async function getMissingChannelPermissions(
 export async function requireGuildPermissions(
   guild: bigint | TebamiGuild,
   member: bigint | TebamiUser,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   const missing = await getMissingGuildPermissions(guild, member, permissions);
   if (missing.length) {
@@ -218,7 +216,7 @@ export async function requireGuildPermissions(
 /** Throws an error if the bot does not have all permissions */
 export function requireBotGuildPermissions(
   guild: bigint | TebamiGuild,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // Since Bot is a normal member we can use the throwOnMissingGuildPermission() function
   return requireGuildPermissions(guild, botId, permissions);
@@ -228,12 +226,12 @@ export function requireBotGuildPermissions(
 export async function requireChannelPermissions(
   channel: bigint | TebamiChannel,
   member: bigint | TebamiUser,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   const missing = await getMissingChannelPermissions(
     channel,
     member,
-    permissions
+    permissions,
   );
   if (missing.length) {
     // If the member is missing a permission throw an Error
@@ -244,7 +242,7 @@ export async function requireChannelPermissions(
 /** Throws an error if the bot has not all of the given channel permissions */
 export function requireBotChannelPermissions(
   channel: bigint | TebamiChannel,
-  permissions: PermissionStrings[]
+  permissions: PermissionStrings[],
 ) {
   // Since Bot is a normal member we can use the throwOnMissingChannelPermission() function
   return requireChannelPermissions(channel, botId, permissions);
@@ -276,7 +274,7 @@ export function calculateBits(permissions: PermissionStrings[]) {
 /** Internal function to check if the bot has the permissions to set these overwrites */
 export async function requireOverwritePermissions(
   guildOrId: bigint | TebamiGuild,
-  overwrites: Overwrite[]
+  overwrites: Overwrite[],
 ) {
   let requiredPerms: Set<PermissionStrings> = new Set(["MANAGE_CHANNELS"]);
 
@@ -296,7 +294,7 @@ export async function requireOverwritePermissions(
 /** Gets the highest role from the member in this guild */
 export async function highestRole(
   guildOrId: bigint | TebamiGuild,
-  memberOrId: bigint | TebamiUser
+  memberOrId: bigint | TebamiUser,
 ) {
   const guild = await getCached("guilds", guildOrId);
 
@@ -304,7 +302,7 @@ export async function highestRole(
 
   // Get the roles from the member
   const memberRoles = (await getCached("members", memberOrId))?.guilds.get(
-    guild.id
+    guild.id,
   )?.roles;
   // This member has no roles so the highest one is the @everyone role
   if (!memberRoles) return guild.roles.get(guild.id)!;
@@ -335,7 +333,7 @@ export async function highestRole(
 export async function higherRolePosition(
   guildOrId: bigint | TebamiGuild,
   roleId: bigint,
-  otherRoleId: bigint
+  otherRoleId: bigint,
 ) {
   const guild = await getCached("guilds", guildOrId);
 
@@ -357,7 +355,7 @@ export async function higherRolePosition(
 export async function isHigherPosition(
   guildOrId: bigint | TebamiGuild,
   memberId: bigint,
-  compareRoleId: bigint
+  compareRoleId: bigint,
 ) {
   const guild = await getCached("guilds", guildOrId);
 

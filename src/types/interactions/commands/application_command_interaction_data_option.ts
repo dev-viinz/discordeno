@@ -26,7 +26,7 @@ export type ApplicationCommandInteractionDataOptionWithValue =
  */
 interface ApplicationCommandInteractionDataOptionBase<
   T extends ApplicationCommandOptionTypes,
-  V = unknown
+  V = unknown,
 > {
   /** The name of the parameter */
   name: string;
@@ -39,9 +39,11 @@ interface ApplicationCommandInteractionDataOptionBase<
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export interface ApplicationCommandInteractionDataOptionSubCommand
-  extends Omit<
-    ApplicationCommandInteractionDataOptionBase<ApplicationCommandOptionTypes.SubCommand>,
+export interface ApplicationCommandInteractionDataOptionSubCommand extends
+  Omit<
+    ApplicationCommandInteractionDataOptionBase<
+      ApplicationCommandOptionTypes.SubCommand
+    >,
     "value"
   > {
   /** Present if this option is a group or subcommand */
@@ -52,10 +54,13 @@ export interface ApplicationCommandInteractionDataOptionSubCommand
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
 export interface ApplicationCommandInteractionDataOptionSubCommandGroup
-  extends Omit<
-    ApplicationCommandInteractionDataOptionBase<ApplicationCommandOptionTypes.SubCommandGroup>,
-    "value"
-  > {
+  extends
+    Omit<
+      ApplicationCommandInteractionDataOptionBase<
+        ApplicationCommandOptionTypes.SubCommandGroup
+      >,
+      "value"
+    > {
   /** Present if this option is a group or subcommand */
   options?: ApplicationCommandInteractionDataOptionSubCommand[];
 }
@@ -63,63 +68,71 @@ export interface ApplicationCommandInteractionDataOptionSubCommandGroup
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionString = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.String,
-  string
->;
+export type ApplicationCommandInteractionDataOptionString =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.String,
+    string
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionInteger = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.Integer,
-  number
->;
+export type ApplicationCommandInteractionDataOptionInteger =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.Integer,
+    number
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionNumber = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.Number,
-  number
->;
+export type ApplicationCommandInteractionDataOptionNumber =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.Number,
+    number
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionBoolean = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.Boolean,
-  boolean
->;
+export type ApplicationCommandInteractionDataOptionBoolean =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.Boolean,
+    boolean
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionUser = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.User,
-  string
->;
+export type ApplicationCommandInteractionDataOptionUser =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.User,
+    string
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionChannel = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.Channel,
-  string
->;
+export type ApplicationCommandInteractionDataOptionChannel =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.Channel,
+    string
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionRole = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.Role,
-  string
->;
+export type ApplicationCommandInteractionDataOptionRole =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.Role,
+    string
+  >;
 
 /**
  * https://discord.com/developers/docs/interactions/slash-commands#interaction-applicationcommandinteractiondataoption
  */
-export type ApplicationCommandInteractionDataOptionMentionable = ApplicationCommandInteractionDataOptionBase<
-  ApplicationCommandOptionTypes.Mentionable,
-  string
->;
+export type ApplicationCommandInteractionDataOptionMentionable =
+  ApplicationCommandInteractionDataOptionBase<
+    ApplicationCommandOptionTypes.Mentionable,
+    string
+  >;

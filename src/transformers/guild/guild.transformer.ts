@@ -29,23 +29,21 @@ export function transformGuild(data: ToDiscordType<Guild>): TebamiGuild {
     defaultMessageNotifications: data.default_message_notifications,
     explicitContentFilter: data.explicit_content_filter,
     roles: new Collection(
-      data.roles.map((role) => [BigInt(role.id), transformRole(role)] as const)
+      data.roles.map((role) => [BigInt(role.id), transformRole(role)] as const),
     ),
     emojis: new Collection(
       data.emojis.map(
-        (emoji) => [BigInt(emoji.id!), transformEmoji(emoji)] as const
-      )
+        (emoji) => [BigInt(emoji.id!), transformEmoji(emoji)] as const,
+      ),
     ),
     features: data.features,
     mfaLevel: data.mfa_level,
     applicationId: data.application_id ? BigInt(data.application_id) : null,
-    systemChannelId: data.system_channel_id
-      ? BigInt(data.system_channel_id)
-      : null,
+    systemChannelId: data.system_channel_id ? BigInt(data.system_channel_id)
+    : null,
     systemChannelFlags: data.system_channel_flags,
-    rulesChannelId: data.rules_channel_id
-      ? BigInt(data.rules_channel_id)
-      : null,
+    rulesChannelId: data.rules_channel_id ? BigInt(data.rules_channel_id)
+    : null,
     // TODO: wrong type
     joinedAt: data.joined_at
       ? Date.parse((data.joined_at as unknown) as string)
@@ -76,11 +74,10 @@ export function transformGuild(data: ToDiscordType<Guild>): TebamiGuild {
     // stageInstances: StageInstance[],
     stickers: data.stickers
       ? new Collection(
-          data.stickers.map(
-            (sticker) =>
-              [BigInt(sticker.id), transformSticker(sticker)] as const
-          )
-        )
+        data.stickers.map(
+          (sticker) => [BigInt(sticker.id), transformSticker(sticker)] as const,
+        ),
+      )
       : new Collection(),
   };
 }

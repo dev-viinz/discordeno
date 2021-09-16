@@ -2,7 +2,7 @@ import { ThreadMetadata } from "../../types/channel/threads/thread_metadata.ts";
 import { ToDiscordType } from "../../types/utils.ts";
 
 export function transformThreadMetadata(
-  threadMetadata: ToDiscordType<ThreadMetadata>
+  threadMetadata: ToDiscordType<ThreadMetadata>,
 ): ThreadMetadata {
   return {
     archived: threadMetadata.archived,

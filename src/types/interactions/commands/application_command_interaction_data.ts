@@ -15,7 +15,7 @@ export type ApplicationCommandInteractionData =
  * https://discord.com/developers/docs/interactions/receiving-and-responding#interaction-object-interaction-data-structure
  */
 export interface ApplicationCommandInteractionDataBase<
-  T extends ApplicationCommandTypes
+  T extends ApplicationCommandTypes,
 > {
   /** The [Id](https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-structure) of the invoked command. */
   id: Snowflake;

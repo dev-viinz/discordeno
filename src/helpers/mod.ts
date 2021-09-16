@@ -11,7 +11,7 @@ const helpers = {
 
 export function createHelpers(
   bot: Bot,
-  customHelpers?: Partial<Helpers>
+  customHelpers?: Partial<Helpers>,
 ): OpenHelpers {
   const converted = {} as OpenHelpers;
   for (const [name, fun] of Object.entries({ ...helpers, ...customHelpers })) {

@@ -5,7 +5,7 @@ import { Gateway } from "./types.ts";
 export async function heartbeat(
   gateway: Gateway,
   shardId: number,
-  interval: number
+  interval: number,
 ) {
   // ws.log("HEARTBEATING_STARTED", { shardId, interval });
 
@@ -23,7 +23,7 @@ export async function heartbeat(
     JSON.stringify({
       op: GatewayOpcodes.Heartbeat,
       d: shard.previousSequenceNumber,
-    })
+    }),
   );
 
   shard.heartbeat.keepAlive = true;
@@ -52,7 +52,7 @@ export async function heartbeat(
       gateway.closeWebSocket(
         currentShard.socket,
         3066,
-        "Did not receive an ACK in time."
+        "Did not receive an ACK in time.",
       );
       return await gateway.identify(gateway, shardId);
     }
@@ -65,7 +65,7 @@ export async function heartbeat(
       JSON.stringify({
         op: GatewayOpcodes.Heartbeat,
         d: currentShard.previousSequenceNumber,
-      })
+      }),
     );
   }, shard.heartbeat.interval);
 }

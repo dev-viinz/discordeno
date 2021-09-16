@@ -1,6 +1,6 @@
 type RAPick<
   T,
-  K extends readonly (keyof T)[] | undefined
+  K extends readonly (keyof T)[] | undefined,
 > = K extends readonly (keyof T)[] ? { [P in K[number]]: T[P] } : T;
 
 type ValueOf<T> = T[keyof T];
@@ -17,9 +17,8 @@ interface F {
 
 function foo<P extends Partial<O> = Partial<O>>(picks?: Partial<P>) {
   type getType<T extends keyof O> = P extends O
-    ? P[T] extends O[T]
-      ? RAPick<F, P[T]>
-      : F
+    ? P[T] extends O[T] ? RAPick<F, P[T]>
+    : F
     : F;
 
   return {

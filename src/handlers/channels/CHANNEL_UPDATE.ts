@@ -5,7 +5,7 @@ import { ToDiscordType } from "../../types/utils.ts";
 
 export default async function handleChannelUpdate(
   bot: Bot,
-  data: ToDiscordType<GatewayDispatchPayload>
+  data: ToDiscordType<GatewayDispatchPayload>,
 ) {
   if (data.t !== GatewayDispatchEvents.ChannelUpdate) return;
 

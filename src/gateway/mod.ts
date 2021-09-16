@@ -37,7 +37,7 @@ export async function createGateway(options: {
   /** The final function which gets executed on an on message event. */
   finalOnMessageHandler?: (
     data: ToDiscordType<GatewayReceivePayload>,
-    shardId: number
+    shardId: number,
   ) => unknown;
 }): Promise<Gateway> {
   const gatewayBot = options.gatewayBot || (await getGatewayBot(options.token));

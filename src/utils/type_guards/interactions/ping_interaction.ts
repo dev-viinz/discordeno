@@ -6,7 +6,7 @@ import { InteractionTypes } from "../../../types/interactions/interaction_types.
 import { ToDiscordType } from "../../../types/utils.ts";
 
 export function isPingInteraction(
-  interaction: Interaction | ToDiscordType<Interaction>
+  interaction: Interaction | ToDiscordType<Interaction>,
 ): interaction is PingInteraction {
   return interaction.type === InteractionTypes.Ping;
 }

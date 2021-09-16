@@ -26,7 +26,7 @@ export async function processQueue(rest: Rest, id: string): Promise<void> {
 
     const basicURL = rest.simplifyUrl(
       queuedRequest.request.url,
-      queuedRequest.request.method.toUpperCase()
+      queuedRequest.request.method.toUpperCase(),
     );
 
     // IF THIS URL IS STILL RATE LIMITED, TRY AGAIN
@@ -47,18 +47,19 @@ export async function processQueue(rest: Rest, id: string): Promise<void> {
     // EXECUTE THE REQUEST
 
     // IF THIS IS A GET REQUEST, CHANGE THE BODY TO QUERY PARAMETERS
-    const query =
-      queuedRequest.request.method.toUpperCase() === "GET" &&
-      queuedRequest.payload.body
-        ? Object.keys(queuedRequest.payload.body)
-            .map(
-              (key) =>
-                `${encodeURIComponent(key)}=${encodeURIComponent(
-                  (queuedRequest.payload.body as Record<string, string>)[key]
-                )}`
-            )
-            .join("&")
-        : "";
+    const query = queuedRequest.request.method.toUpperCase() === "GET" &&
+        queuedRequest.payload.body
+      ? Object.keys(queuedRequest.payload.body)
+        .map(
+          (key) =>
+            `${encodeURIComponent(key)}=${
+              encodeURIComponent(
+                (queuedRequest.payload.body as Record<string, string>)[key],
+              )
+            }`,
+        )
+        .join("&")
+      : "";
     const urlToUse =
       queuedRequest.request.method.toUpperCase() === "GET" && query
         ? `${queuedRequest.request.url}?${query}`
@@ -70,14 +71,14 @@ export async function processQueue(rest: Rest, id: string): Promise<void> {
     try {
       const response = await fetch(
         urlToUse,
-        rest.createRequestBody(rest, queuedRequest)
+        rest.createRequestBody(rest, queuedRequest),
       );
 
       rest.eventHandlers.fetched?.(queuedRequest.payload);
       const bucketIdFromHeaders = rest.processRequestHeaders(
         rest,
         basicURL,
-        response.headers
+        response.headers,
       );
       // SET THE BUCKET Id IF IT WAS PRESENT
       if (bucketIdFromHeaders) {
@@ -88,7 +89,7 @@ export async function processQueue(rest: Rest, id: string): Promise<void> {
         rest.eventHandlers.error?.(
           "httpError",
           queuedRequest.payload,
-          response
+          response,
         );
 
         let error = "REQUEST_UNKNOWN_ERROR";
@@ -120,7 +121,7 @@ export async function processQueue(rest: Rest, id: string): Promise<void> {
         // If Rate limited should not remove from queue
         if (response.status !== 429) {
           queuedRequest.request.reject(
-            new Error(`[${response.status}] ${error}`)
+            new Error(`[${response.status}] ${error}`),
           );
           queue.shift();
         } else {
@@ -128,8 +129,8 @@ export async function processQueue(rest: Rest, id: string): Promise<void> {
             rest.eventHandlers.retriesMaxed?.(queuedRequest.payload);
             queuedRequest.request.reject(
               new Error(
-                `[${response.status}] The request was rate limited and it maxed out the retries limit.`
-              )
+                `[${response.status}] The request was rate limited and it maxed out the retries limit.`,
+              ),
             );
             // REMOVE ITEM FROM QUEUE TO PREVENT RETRY
             queue.shift();

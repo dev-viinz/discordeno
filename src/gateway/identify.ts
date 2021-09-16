@@ -8,7 +8,7 @@ export function identify(gateway: Gateway, shardId: number) {
     gateway.closeWebSocket(
       oldShard.socket,
       3065,
-      "Reidentifying closure of old shard"
+      "Reidentifying closure of old shard",
     );
     clearInterval(oldShard.heartbeat.intervalId);
   }
@@ -25,7 +25,7 @@ export function identify(gateway: Gateway, shardId: number) {
           shard: [shardId, gateway.totalShards],
         },
       },
-      true
+      true,
     );
   });
 
@@ -55,7 +55,7 @@ export function identify(gateway: Gateway, shardId: number) {
   return new Promise((resolve, reject) => {
     const timeout = setTimeout(() => {
       reject(
-        `[Identify Failure] Shard ${shardId} has not received READY event in over a minute.`
+        `[Identify Failure] Shard ${shardId} has not received READY event in over a minute.`,
       );
     }, 600000);
 

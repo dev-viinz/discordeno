@@ -3,7 +3,7 @@ import { ToDiscordType } from "../../types/utils.ts";
 import transformUser from "../user/user.transformer.ts";
 
 export function transformGuildMember(
-  data: ToDiscordType<GuildMember>
+  data: ToDiscordType<GuildMember>,
 ): GuildMember {
   return {
     user: data.user ? transformUser(data.user) : undefined,

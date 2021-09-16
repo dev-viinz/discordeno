@@ -13,7 +13,7 @@ export type ApplicationCommandOption =
  * https://discord.com/developers/docs/interactions/application-commands#application-command-object-application-command-option-structure
  */
 export interface ApplicationCommandOptionBase<
-  T extends ApplicationCommandOptionTypes
+  T extends ApplicationCommandOptionTypes,
 > {
   /** The type of option. */
   type: T;
@@ -41,7 +41,8 @@ export interface ApplicationCommandOptionInteger
 }
 
 export interface ApplicationCommandOptionSubcommand
-  extends ApplicationCommandOptionBase<ApplicationCommandOptionTypes.SubCommand> {
+  extends
+    ApplicationCommandOptionBase<ApplicationCommandOptionTypes.SubCommand> {
   options?: Omit<
     ApplicationCommandOption,
     | "ApplicationCommandOptionSubcommand"
@@ -50,7 +51,10 @@ export interface ApplicationCommandOptionSubcommand
 }
 
 export interface ApplicationCommandOptionSubCommandGroup
-  extends ApplicationCommandOptionBase<ApplicationCommandOptionTypes.SubCommandGroup> {
+  extends
+    ApplicationCommandOptionBase<
+      ApplicationCommandOptionTypes.SubCommandGroup
+    > {
   options?: Omit<
     ApplicationCommandOption,
     | "ApplicationCommandOptionSubcommand"

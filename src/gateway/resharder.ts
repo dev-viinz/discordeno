@@ -25,7 +25,7 @@ export async function resharder(gateway: Gateway) {
       gateway.totalShards /
         (gateway.gatewayBot.sessionStartLimit.maxConcurrency === 1
           ? 16
-          : gateway.gatewayBot.sessionStartLimit.maxConcurrency)
+          : gateway.gatewayBot.sessionStartLimit.maxConcurrency),
     );
   }
 

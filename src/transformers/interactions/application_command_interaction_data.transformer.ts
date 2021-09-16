@@ -4,7 +4,7 @@ import { hasProperty } from "../../utils/has_property.ts";
 import transformApplicationCommandResolvedData from "./application_command_resolved_data.transformer.ts";
 
 export default function transformApplicationCommandInteractionData(
-  data: ToDiscordType<ApplicationCommandInteractionData>
+  data: ToDiscordType<ApplicationCommandInteractionData>,
 ): ApplicationCommandInteractionData {
   return {
     id: BigInt(data.id),

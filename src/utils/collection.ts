@@ -209,7 +209,7 @@ export class Collection<K, V> extends Map<K, V> {
 
   constructor(
     entries?: (readonly (readonly [K, V])[] | null) | Map<K, V>,
-    options?: CollectionOptions<K, V>
+    options?: CollectionOptions<K, V>,
   ) {
     super(entries ?? []);
 
@@ -292,7 +292,7 @@ export class Collection<K, V> extends Map<K, V> {
 
   reduce<T>(
     callback: (accumulator: T, value: V, key: K) => T,
-    initialValue?: T
+    initialValue?: T,
   ): T {
     let accumulator: T = initialValue!;
 

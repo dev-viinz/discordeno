@@ -4,7 +4,7 @@ import { Gateway } from "./types.ts";
 export function createSocket(
   gateway: Gateway,
   shardId: number,
-  onOpenhandler: () => unknown
+  onOpenhandler: () => unknown,
 ) {
   const socket = new WebSocket(gateway.gatewayBot.url);
   socket.binaryType = "arraybuffer";

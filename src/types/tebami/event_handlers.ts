@@ -16,7 +16,7 @@ export interface EventHandlers {
   /** Sent before every event. Discordeno awaits the execution of this event before main event gets sent. */
   dispatchRequirements?: (
     data: ToDiscordType<GatewayReceivePayload>,
-    shardId: number
+    shardId: number,
   ) => unknown;
   /** When a guild goes available this event will be ran. */
   guildAvailable?: (guild: TebamiGuild, shardId: number) => unknown;
@@ -29,14 +29,14 @@ export interface EventHandlers {
   /** Sent before every event execution. Discordeno will not await its execution. */
   raw?: (
     data: ToDiscordType<GatewayReceivePayload>,
-    shardId: number
+    shardId: number,
   ) => unknown;
   /** Sent when all shards went ready. */
   ready?: () => unknown;
   /** Sent when a shard failed to load. */
   shardFailedToLoad?: (
     shardId: number,
-    unavailableGuildIds: Set<bigint>
+    unavailableGuildIds: Set<bigint>,
   ) => unknown;
   /** Sent when a shard got ready. */
   shardReady?: (shardId: number) => unknown;

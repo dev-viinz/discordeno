@@ -6,7 +6,7 @@ import { Gateway } from "./types.ts";
 export async function requestShardIdentify(
   gateway: Gateway,
   shardId: number,
-  _bucketId: number
+  _bucketId: number,
 ) {
   await gateway.identify(gateway, shardId);
 }

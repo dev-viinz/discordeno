@@ -42,16 +42,16 @@ export interface Rest {
   processRequestHeaders: (
     rest: Rest,
     url: string,
-    headers: Headers
+    headers: Headers,
   ) => string | undefined;
   processRequest: (
     rest: Rest,
     request: RestRequest,
-    payload: RestPayload
+    payload: RestPayload,
   ) => Promise<void>;
   createRequestBody: (
     rest: Rest,
-    queuedRequest: { request: RestRequest; payload: RestPayload }
+    queuedRequest: { request: RestRequest; payload: RestPayload },
   ) => {
     headers: {
       [key: string]: string;
@@ -65,7 +65,7 @@ export interface Rest {
     url: string,
     body?: {},
     retryCount?: number,
-    bucketId?: string
+    bucketId?: string,
   ) => Promise<T>;
   simplifyUrl: (url: string, method: string) => string;
 }

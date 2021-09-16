@@ -2,7 +2,7 @@ import { ThreadMember } from "../../types/channel/threads/thread_member.ts";
 import { ToDiscordType } from "../../types/utils.ts";
 
 export function transformThreadMember(
-  threadMember: ToDiscordType<ThreadMember>
+  threadMember: ToDiscordType<ThreadMember>,
 ): ThreadMember {
   return {
     id: threadMember.id ? BigInt(threadMember.id) : undefined,

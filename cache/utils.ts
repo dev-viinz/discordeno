@@ -1,9 +1,9 @@
 import {
-  ExtensionCodec,
-  encode,
+  createFernet,
   decode,
   DecodeError,
-  createFernet,
+  encode,
+  ExtensionCodec,
 } from "./deps.ts";
 
 export const extensionCodec = new ExtensionCodec();

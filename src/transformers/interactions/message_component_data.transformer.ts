@@ -4,7 +4,7 @@ import { SelectMenuData } from "../../types/interactions/message_components/sele
 import { ToDiscordType } from "../../types/utils.ts";
 
 export function transformMessageComponentData(
-  data: ToDiscordType<ButtonData | SelectMenuData>
+  data: ToDiscordType<ButtonData | SelectMenuData>,
 ): ButtonData | SelectMenuData {
   switch (data.component_type) {
     case ComponentTypes.SelectMenu:

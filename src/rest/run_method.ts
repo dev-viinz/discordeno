@@ -1,4 +1,4 @@
-import { BASE_URL, API_VERSION, IMAGE_BASE_URL } from "../utils/constants.ts";
+import { API_VERSION, BASE_URL, IMAGE_BASE_URL } from "../utils/constants.ts";
 import { Methods, Rest } from "./types.ts";
 import { toDiscordBody } from "../utils/to_discord_body.ts";
 
@@ -9,7 +9,7 @@ export async function runMethod<T = any>(
   url: string,
   body?: Record<string, unknown>,
   retryCount = 0,
-  bucketId?: string
+  bucketId?: string,
 ): Promise<T> {
   if (body) {
     // TODO: convert camelCase to snake_case and make bigints to strings
@@ -61,16 +61,16 @@ export async function runMethod<T = any>(
           resolve(
             data.status !== 204
               ? // TODO: idk should I add camelize :thinking:
-                // ? camelize<T>(JSON.parse(data.body ?? "{}"))
+              // ? camelize<T>(JSON.parse(data.body ?? "{}"))
                 JSON.parse(data.body ?? "{}")
-              : ((undefined as unknown) as T)
+              : ((undefined as unknown) as T),
           ),
       },
       {
         bucketId,
         body,
         retryCount,
-      }
+      },
     );
   });
 }

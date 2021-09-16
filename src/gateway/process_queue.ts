@@ -26,9 +26,10 @@ export async function processQueue(gateway: Gateway, shardId: number) {
 
     // TODO: move this stringify to its own function
     shard.socket.send(
-      JSON.stringify(request, (_, v) =>
-        typeof v === "bigint" ? v.toString() : v
-      )
+      JSON.stringify(
+        request,
+        (_, v) => typeof v === "bigint" ? v.toString() : v,
+      ),
     );
 
     // Counter is useful for preventing 120/m requests.

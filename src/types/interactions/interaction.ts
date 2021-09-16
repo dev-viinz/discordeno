@@ -26,7 +26,7 @@ export interface BaseInteraction<
     | ApplicationCommandInteractionData
     | ButtonData
     | SelectMenuData
-    | undefined
+    | undefined,
 > {
   /** Id of the interaction */
   id: Snowflake;
@@ -50,8 +50,8 @@ export interface BaseInteraction<
   data: D;
 }
 
-export interface ComponentInteraction
-  extends BaseInteraction<
+export interface ComponentInteraction extends
+  BaseInteraction<
     InteractionTypes.MessageComponent,
     ButtonData | SelectMenuData
   > {

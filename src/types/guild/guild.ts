@@ -116,8 +116,8 @@ export interface Guild {
   stickers?: Sticker[];
 }
 
-export interface TebamiGuild
-  extends Omit<
+export interface TebamiGuild extends
+  Omit<
     Guild,
     | "channels"
     | "threads"

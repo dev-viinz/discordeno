@@ -4,7 +4,7 @@ import { Rest } from "./types.ts";
 export function processRequestHeaders(
   rest: Rest,
   url: string,
-  headers: Headers
+  headers: Headers,
 ): string | undefined {
   let ratelimited = false;
 

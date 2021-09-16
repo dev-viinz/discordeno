@@ -58,13 +58,13 @@ export interface Gateway {
   closeWebSocket: (
     socket: WebSocket,
     code?: number,
-    reason?: string
+    reason?: string,
   ) => unknown;
   /** Request the identify of the next shard for this bucket. */
   requestShardIdentify: (
     gateway: Gateway,
     shardId: number,
-    bucketId: number
+    bucketId: number,
   ) => unknown;
   // TODO: better return type
   /** Use this function to identify a shard. */
@@ -75,7 +75,7 @@ export interface Gateway {
   createSocket: (
     gateway: Gateway,
     shardId: number,
-    onOpenhandler: () => unknown
+    onOpenhandler: () => unknown,
   ) => WebSocket;
   /** Begins heartbeating to keep the shard alive. */
   heartbeat: (gateway: Gateway, shardId: number, interval: number) => unknown;
@@ -84,7 +84,7 @@ export interface Gateway {
     gateway: Gateway,
     shard: number | Shard,
     message: ShardMessageRequest,
-    highPriority: boolean
+    highPriority: boolean,
   ) => unknown;
   /** Handles processing queue of requests send to this shard. */
   processQueue: (gateway: Gateway, shardId: number) => unknown;
@@ -98,7 +98,7 @@ export interface Gateway {
   /** The final function which gets executed on an on message event. */
   finalOnMessageHandler?: (
     data: ToDiscordType<GatewayReceivePayload>,
-    shardId: number
+    shardId: number,
   ) => unknown;
 }
 

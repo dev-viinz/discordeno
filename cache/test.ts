@@ -32,7 +32,7 @@ for await (const conn of server) {
       return await requestEvent.respondWith(
         new Response("hello world", {
           status: 200,
-        })
+        }),
       );
     }
   })();

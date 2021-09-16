@@ -5,7 +5,7 @@ import { Rest, RestPayload, RestRequest } from "./types.ts";
 /** Creates the request body and headers that are necessary to send a request. Will handle different types of methods and everything necessary for discord. */
 export function createRequestBody(
   rest: Rest,
-  queuedRequest: { request: RestRequest; payload: RestPayload }
+  queuedRequest: { request: RestRequest; payload: RestPayload },
 ): {
   headers: {
     [key: string]: string;
@@ -26,7 +26,7 @@ export function createRequestBody(
   // IF A REASON IS PROVIDED ENCODE IT IN HEADERS
   if (queuedRequest.payload.body?.reason) {
     headers["X-Audit-Log-Reason"] = encodeURIComponent(
-      queuedRequest.payload.body.reason as string
+      queuedRequest.payload.body.reason as string,
     );
   }
 
@@ -46,13 +46,13 @@ export function createRequestBody(
       form.append(
         `file${i}`,
         (queuedRequest.payload.body.file as FileContent[])[i].blob,
-        (queuedRequest.payload.body.file as FileContent[])[i].name
+        (queuedRequest.payload.body.file as FileContent[])[i].name,
       );
     }
 
     form.append(
       "payload_json",
-      JSON.stringify({ ...queuedRequest.payload.body, file: undefined })
+      JSON.stringify({ ...queuedRequest.payload.body, file: undefined }),
     );
     queuedRequest.payload.body.file = form;
   } else if (

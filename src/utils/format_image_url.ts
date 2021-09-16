@@ -4,9 +4,8 @@ import { DiscordImageSize } from "../types/misc/image_size.ts";
 export function formatImageUrl(
   url: string,
   size: DiscordImageSize = 128,
-  format?: DiscordImageFormat
+  format?: DiscordImageFormat,
 ) {
-  return `${url}.${
-    format || (url.includes("/a_") ? "gif" : "jpg")
-  }?size=${size}`;
+  return `${url}.${format ||
+    (url.includes("/a_") ? "gif" : "jpg")}?size=${size}`;
 }

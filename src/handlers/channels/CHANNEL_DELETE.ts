@@ -6,7 +6,7 @@ import { ToDiscordType } from "../../types/utils.ts";
 
 export default async function handleChannelDelete(
   bot: Bot,
-  data: ToDiscordType<GatewayDispatchPayload>
+  data: ToDiscordType<GatewayDispatchPayload>,
 ) {
   if (data.t !== GatewayDispatchEvents.ChannelDelete) return;
 
@@ -28,7 +28,7 @@ export default async function handleChannelDelete(
           if (!user) return;
 
           bot.eventHandlers.voiceChannelLeave?.(user, vs.channelId);
-        })
+        }),
       );
     }
   }

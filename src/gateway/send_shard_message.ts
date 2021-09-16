@@ -4,7 +4,7 @@ export function sendShardMessage(
   gateway: Gateway,
   shard: number | Shard,
   message: ShardMessageRequest,
-  highPriority = false
+  highPriority = false,
 ) {
   if (typeof shard === "number") shard = gateway.shards.get(shard)!;
   if (!shard) return;
