@@ -191,48 +191,48 @@ const bot = await createBot({
 });
 
 bot.start();
-// const res = await bot.fetch(
-//   "POST",
-//   "https://discord.com/api/v9/channels/830362569390030878/messages",
-//   {
-//     content: "Testing REST",
-//     components: new Components()
-//       .addButton("idk", "Red", "orange")
-//       .addButton("asdf", "Blurple", "oo")
-//       .addSelectMenu("Choose a class", "class_select_1", [
-//         {
-//           label: "Rogue",
-//           value: "rogue",
-//           description: "Sneak n stab",
-//           emoji: {
-//             name: "rogue",
-//             id: 625891304148303894n,
-//           },
-//         },
-//         {
-//           label: "Mage",
-//           value: "mage",
-//           description: "Turn 'em into a sheep",
-//           emoji: {
-//             name: "mage",
-//             id: 625891304081063986n,
-//           },
-//         },
-//         {
-//           label: "Priest",
-//           value: "priest",
-//           description: "You get heals when I'm done doing damage",
-//           emoji: {
-//             name: "priest",
-//             id: 625891303795982337n,
-//           },
-//         },
-//       ])
-//       .addButton("test", "Green", "hey"),
-//   }
-// );
+const res = await bot.fetch(
+  "POST",
+  "https://discord.com/api/v9/channels/830362569390030878/messages",
+  {
+    content: "Testing REST",
+    components: new bot.Components()
+      .addButton("idk", "Red", "orange")
+      .addButton("asdf", "Blurple", "oo")
+      .addSelectMenu("Choose a class", "class_select_1", [
+        {
+          label: "Rogue",
+          value: "rogue",
+          description: "Sneak n stab",
+          emoji: {
+            name: "rogue",
+            id: 625891304148303894n,
+          },
+        },
+        {
+          label: "Mage",
+          value: "mage",
+          description: "Turn 'em into a sheep",
+          emoji: {
+            name: "mage",
+            id: 625891304081063986n,
+          },
+        },
+        {
+          label: "Priest",
+          value: "priest",
+          description: "You get heals when I'm done doing damage",
+          emoji: {
+            name: "priest",
+            id: 625891303795982337n,
+          },
+        },
+      ])
+      .addButton("test", "Green", "hey"),
+  },
+);
 
-// console.log(res);
+console.log(res);
 
 export interface Bot<C extends Cache | AsyncCache = AsyncCache | Cache>
   extends OpenHelpers, TebamiUtils {
