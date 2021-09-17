@@ -1,4 +1,4 @@
-import { avatarUrl } from "../helpers/user/avatar_url.ts";
+import { avatarUrl } from "./avatar_url.ts";
 import { Embed } from "../types/channel/messages/embeds/embed.ts";
 import { User } from "../types/user/user.ts";
 

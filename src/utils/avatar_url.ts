@@ -1,4 +1,3 @@
-import { Bot } from "../bot.ts";
 import { DiscordImageFormat } from "../types/misc/image_format.ts";
 import { DiscordImageSize } from "../types/misc/image_size.ts";
 import { User } from "../types/user/user.ts";
@@ -8,7 +7,6 @@ import { iconBigintToHash } from "./hash.ts";
 
 /** The users custom avatar or the default avatar if you don't have a member object. */
 export function avatarUrl(
-  _: Bot,
   user: Pick<User, "id" | "discriminator" | "avatar">,
   options?: { size?: DiscordImageSize; format?: DiscordImageFormat },
 ): string {
