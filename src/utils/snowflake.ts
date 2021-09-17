@@ -1,7 +1,7 @@
 import { Snowflake } from "../types/base.ts";
 
 /** Deconstructs (melts) a Snowflake and returns its information */
-export function melt(snowflake: Snowflake) {
+export function meltSnowflake(snowflake: Snowflake) {
   return {
     timestamp: snowlakeToUnix(snowflake),
     workerId: (snowflake & 0x3e0000n) >> 17n,

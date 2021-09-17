@@ -24,6 +24,7 @@ import {
   createExecute,
   TableNames,
 } from "./cache.ts";
+import { TebamiUtils, tebamiUtils } from "./utils/mod.ts";
 
 type CreateBotOptions = {
   /** The Authorization token of your bot. */
@@ -105,6 +106,8 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
 
     cache,
     isReady: false,
+
+    ...tebamiUtils,
 
     fetch: async function (method, url, body, transformer) {
       // deno-lint-ignore no-explicit-any
@@ -232,7 +235,7 @@ bot.start();
 // console.log(res);
 
 export interface Bot<C extends Cache | AsyncCache = AsyncCache | Cache>
-  extends OpenHelpers {
+  extends OpenHelpers, TebamiUtils {
   id: bigint;
   applicationId: bigint;
   token: string;
