@@ -1,11 +1,9 @@
 import { Bot } from "../bot.ts";
 import { RemoveFirstFromTuple } from "../types/utils.ts";
-import { avatarUrl } from "./user/avatar_url.ts";
-import { sendInteractionResponse } from "./interactions/send_interaction_response.ts";
-export { avatarUrl, sendInteractionResponse };
+import { sendInteractionResponse } from "./interactions/mod.ts";
+export { sendInteractionResponse };
 
 const helpers = {
-  avatarUrl,
   sendInteractionResponse,
 };
 
