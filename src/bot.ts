@@ -4,7 +4,12 @@ import { GatewayIntents } from "./types/gateway/gateway_intents.ts";
 import { Methods, Rest } from "./rest/types.ts";
 import { createRest } from "./rest/rest.ts";
 import { GatewayReceivePayload } from "./types/gateway/gateway_payload.ts";
-import { createTransformers, Transformers } from "./transformers/mod.ts";
+import {
+  createTransformers,
+  CustomTransformers,
+  MergeTransformers,
+  Transformers,
+} from "./transformers/mod.ts";
 import { Handlers } from "./handlers/mod.ts";
 import { createHandlers } from "./handlers/mod.ts";
 import { GATEWAY_VERSION } from "./utils/constants.ts";
@@ -56,11 +61,18 @@ type CreateBotOptions = {
   ) => unknown;
   eventHandlers?: EventHandlers;
   createCacheExecute?: (cache: Cache | AsyncCache) => CacheExecutor;
+
+  customTransformers?: CustomTransformers;
 };
 
 export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
   options: T,
-): Promise<Bot<T["cache"] extends { isAsync: true } ? AsyncCache : Cache>> {
+): Promise<
+  Bot<
+    T["customTransformers"],
+    T["cache"] extends { isAsync: true } ? AsyncCache : Cache
+  >
+> {
   const intents = options.intents
     ? options.intents.reduce(
       (
@@ -88,7 +100,10 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
   const rest = createRest({ token: options.token });
 
   const bot: Omit<
-    Bot<T["cache"] extends { isAsync: true } ? AsyncCache : Cache>,
+    Bot<
+      T["customTransformers"],
+      T["cache"] extends { isAsync: true } ? AsyncCache : Cache
+    >,
     keyof OpenHelpers
   > = {
     id: options.botId,
@@ -101,7 +116,9 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
     rest,
 
     handlers: createHandlers(),
-    transformers: createTransformers(),
+    transformers: createTransformers<T["customTransformers"]>(
+      options.customTransformers,
+    ),
     eventHandlers: options?.eventHandlers ?? {},
 
     cache,
@@ -124,7 +141,11 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
       if (data.op !== GatewayOpcodes.Dispatch) return;
       //   if (!messageData.t) return;
       // `as unknown as Bot` is required because helper functions are missing here this is not important though.
-      bot.handlers[data.t]?.((bot) as unknown as Bot, data, shardId);
+      bot.handlers[data.t]?.(
+        (bot) as unknown as Bot<T["customTransformers"]>,
+        data,
+        shardId,
+      );
     });
 
   // TODO: this should be done by the gateway function
@@ -132,7 +153,10 @@ export async function createBot<T extends CreateBotOptions = CreateBotOptions>(
   bot.gateway.gatewayBot.url += `?v=${GATEWAY_VERSION}&encoding=json`;
 
   // `as unknown as Bot` is required because helper functions are missing here this is not important though.
-  return { ...bot, ...createHelpers((bot as unknown) as Bot) };
+  return {
+    ...bot,
+    ...createHelpers((bot as unknown) as Bot<T["customTransformers"]>),
+  };
 }
 
 const bot = await createBot({
@@ -230,12 +254,15 @@ const res = await bot.fetch(
       ])
       .addButton("test", "Green", "hey"),
   },
+  bot.transformers.transformMessage,
 );
 
 console.log(res);
 
-export interface Bot<C extends Cache | AsyncCache = AsyncCache | Cache>
-  extends OpenHelpers, TebamiUtils {
+export interface Bot<
+  CT extends CustomTransformers | undefined,
+  C extends Cache | AsyncCache = AsyncCache | Cache,
+> extends OpenHelpers, TebamiUtils {
   id: bigint;
   applicationId: bigint;
   token: string;
@@ -246,7 +273,7 @@ export interface Bot<C extends Cache | AsyncCache = AsyncCache | Cache>
   start: () => void;
   handlers: Handlers;
 
-  transformers: Transformers;
+  transformers: MergeTransformers<CT>;
   eventHandlers: EventHandlers;
 
   cache: C;

@@ -56,10 +56,20 @@ const transformers = {
   transformMessageComponentData,
 };
 
-export function createTransformers(
-  customTransformers?: Transformers,
-): Transformers {
-  return { ...transformers, ...customTransformers };
+export function createTransformers<
+  T extends CustomTransformers | undefined = CustomTransformers,
+>(
+  customTransformers?: T,
+): MergeTransformers<T> {
+  return { ...transformers, ...customTransformers } as MergeTransformers<T>;
 }
 
 export type Transformers = typeof transformers;
+
+export type CustomTransformers = {
+  [K in keyof Transformers]?: (...args: Parameters<Transformers[K]>) => unknown;
+};
+
+export type MergeTransformers<C extends CustomTransformers | undefined> =
+  & Omit<Transformers, keyof C>
+  & C;
