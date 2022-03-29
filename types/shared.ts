@@ -71,11 +71,19 @@ export enum MessageComponentTypes {
   /** A container for other components */
   ActionRow = 1,
   /** A button object */
-  Button = 2,
+  Button,
   /** A select menu for picking from choices */
-  SelectMenu = 3,
+  SelectMenu,
   /** A text input object */
-  InputText = 4,
+  InputText,
+  /** A selector menu for picking a user in the server. */
+  UserSelect,
+  /** A selector menu for picking a role in the server. */
+  RoleSelect,
+  /** A selector menu for picking a user or a role in the server. */
+  MentionableSelect,
+  /** A selector menu for selecting a channel in the server. */
+  ChannelSelect,
 }
 
 export enum TextStyles {
