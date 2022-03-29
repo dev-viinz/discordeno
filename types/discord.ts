@@ -1161,6 +1161,32 @@ export interface DiscordSelectMenuComponent {
   options: DiscordSelectOption[];
 }
 
+export interface DiscordStandardSelectMenuComponent {
+  type: MessageComponentTypes.UserSelect | MessageComponentTypes.RoleSelect | MessageComponentTypes.MentionableSelect;
+  /** A custom identifier for this component. Maximum 100 characters. */
+  custom_id: string;
+  /** A custom placeholder text if nothing is selected. Maximum 150 characters. */
+  placeholder?: string;
+  /** The minimum number of items that must be selected. Default 1. Between 1-25. */
+  min_values?: number;
+  /** The maximum number of items that can be selected. Default 1. Between 1-25. */
+  max_values?: number;
+}
+
+export interface DiscordChannelSelectMenuComponent {
+  type: MessageComponentTypes.ChannelSelect;
+  /** A custom identifier for this component. Maximum 100 characters. */
+  custom_id: string;
+  /** A custom placeholder text if nothing is selected. Maximum 150 characters. */
+  placeholder?: string;
+  /** The minimum number of items that must be selected. Default 1. Between 1-25. */
+  min_values?: number;
+  /** The maximum number of items that can be selected. Default 1. Between 1-25. */
+  max_values?: number;
+  /** The channel types to allow for selecting. */
+  channel_types: ChannelTypes[];
+}
+
 export interface DiscordSelectOption {
   /** The user-facing name of the option. Maximum 25 characters. */
   label: string;
