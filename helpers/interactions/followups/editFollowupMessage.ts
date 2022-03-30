@@ -1,5 +1,6 @@
 import { Bot } from "../../../bot.ts";
 import { DiscordMessage } from "../../../types/discord.ts";
+import { isStandardSelectMenu } from "../../../types/discordeno.ts";
 import { MessageComponentTypes } from "../../../types/shared.ts";
 import { EditWebhookMessage } from "../../webhooks/editWebhookMessage.ts";
 
@@ -72,6 +73,29 @@ export async function editFollowupMessage(
                   : undefined,
                 default: option.default,
               })),
+            };
+          }
+
+          if (
+            isStandardSelectMenu(subcomponent)
+          ) {
+            return {
+              type: subcomponent.type,
+              custom_id: subcomponent.customId,
+              placeholder: subcomponent.placeholder,
+              min_values: subcomponent.minValues,
+              max_values: subcomponent.maxValues,
+            };
+          }
+
+          if (subcomponent.type === MessageComponentTypes.ChannelSelect) {
+            return {
+              type: subcomponent.type,
+              custom_id: subcomponent.customId,
+              placeholder: subcomponent.placeholder,
+              min_values: subcomponent.minValues,
+              max_values: subcomponent.maxValues,
+              channel_types: subcomponent.channelTypes,
             };
           }
 

@@ -2,7 +2,7 @@ import type { Bot } from "../../bot.ts";
 import { Attachment } from "../../transformers/attachment.ts";
 import { Embed } from "../../transformers/embed.ts";
 import { DiscordMessage } from "../../types/discord.ts";
-import { AllowedMentions, FileContent, MessageComponents } from "../../types/discordeno.ts";
+import { AllowedMentions, FileContent, isStandardSelectMenu, MessageComponents } from "../../types/discordeno.ts";
 import { MessageComponentTypes } from "../../types/shared.ts";
 
 /** Edit the message. */
@@ -66,6 +66,29 @@ export async function editMessage(bot: Bot, channelId: bigint, messageId: bigint
                   : undefined,
                 default: option.default,
               })),
+            };
+          }
+
+          if (
+            isStandardSelectMenu(subcomponent)
+          ) {
+            return {
+              type: subcomponent.type,
+              custom_id: subcomponent.customId,
+              placeholder: subcomponent.placeholder,
+              min_values: subcomponent.minValues,
+              max_values: subcomponent.maxValues,
+            };
+          }
+
+          if (subcomponent.type === MessageComponentTypes.ChannelSelect) {
+            return {
+              type: subcomponent.type,
+              custom_id: subcomponent.customId,
+              placeholder: subcomponent.placeholder,
+              min_values: subcomponent.minValues,
+              max_values: subcomponent.maxValues,
+              channel_types: subcomponent.channelTypes,
             };
           }
 

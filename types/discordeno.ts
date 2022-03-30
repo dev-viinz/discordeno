@@ -1,5 +1,5 @@
 import { SelectOption } from "../transformers/component.ts";
-import { AllowedMentionsTypes, ButtonStyles, MessageComponentTypes, TextStyles } from "./shared.ts";
+import { AllowedMentionsTypes, ButtonStyles, ChannelTypes, MessageComponentTypes, TextStyles } from "./shared.ts";
 
 export type MessageComponents = ActionRow[];
 
@@ -9,7 +9,13 @@ export interface ActionRow {
   type: 1;
   /** The components in this row */
   components:
-    | [SelectMenuComponent | ButtonComponent | InputTextComponent]
+    | [
+      | SelectMenuComponent
+      | ButtonComponent
+      | InputTextComponent
+      | StandardSelectMenuComponent
+      | ChannelSelectMenuComponent,
+    ]
     | [ButtonComponent, ButtonComponent]
     | [ButtonComponent, ButtonComponent, ButtonComponent]
     | [ButtonComponent, ButtonComponent, ButtonComponent, ButtonComponent]
@@ -28,6 +34,32 @@ export interface SelectMenuComponent {
   maxValues?: number;
   /** The choices! Maximum of 25 items. */
   options: SelectOption[];
+}
+
+export interface StandardSelectMenuComponent {
+  type: MessageComponentTypes.UserSelect | MessageComponentTypes.RoleSelect | MessageComponentTypes.MentionableSelect;
+  /** A custom identifier for this component. Maximum 100 characters. */
+  customId: string;
+  /** A custom placeholder text if nothing is selected. Maximum 150 characters. */
+  placeholder?: string;
+  /** The minimum number of items that must be selected. Default 1. Between 1-25. */
+  minValues?: number;
+  /** The maximum number of items that can be selected. Default 1. Between 1-25. */
+  maxValues?: number;
+}
+
+export interface ChannelSelectMenuComponent {
+  type: MessageComponentTypes.ChannelSelect;
+  /** A custom identifier for this component. Maximum 100 characters. */
+  customId: string;
+  /** A custom placeholder text if nothing is selected. Maximum 150 characters. */
+  placeholder?: string;
+  /** The minimum number of items that must be selected. Default 1. Between 1-25. */
+  minValues?: number;
+  /** The maximum number of items that can be selected. Default 1. Between 1-25. */
+  maxValues?: number;
+  /** The channel types to allow for selecting. */
+  channelTypes?: ChannelTypes[];
 }
 
 /** https://discord.com/developers/docs/interactions/message-components#buttons-button-object */
@@ -103,4 +135,16 @@ export interface SearchMembers {
   query: string;
   /** Max number of members to return (1-1000). Default: 1 */
   limit?: number;
+}
+
+export function isStandardSelectMenu(
+  component:
+    | SelectMenuComponent
+    | ButtonComponent
+    | InputTextComponent
+    | StandardSelectMenuComponent
+    | ChannelSelectMenuComponent,
+): component is StandardSelectMenuComponent {
+  return [MessageComponentTypes.UserSelect, MessageComponentTypes.RoleSelect, MessageComponentTypes.MentionableSelect]
+    .includes(component.type);
 }

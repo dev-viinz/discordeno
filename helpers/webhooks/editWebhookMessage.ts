@@ -1,5 +1,5 @@
 import type { Bot } from "../../bot.ts";
-import { AllowedMentions, FileContent, MessageComponents } from "../../types/discordeno.ts";
+import { AllowedMentions, FileContent, isStandardSelectMenu, MessageComponents } from "../../types/discordeno.ts";
 import { DiscordMessage } from "../../types/discord.ts";
 import { MessageComponentTypes } from "../../types/shared.ts";
 import { Attachment } from "../../transformers/attachment.ts";
@@ -78,6 +78,29 @@ export async function editWebhookMessage(
                 : undefined,
               default: option.default,
             })),
+          };
+        }
+
+        if (
+          isStandardSelectMenu(subcomponent)
+        ) {
+          return {
+            type: subcomponent.type,
+            custom_id: subcomponent.customId,
+            placeholder: subcomponent.placeholder,
+            min_values: subcomponent.minValues,
+            max_values: subcomponent.maxValues,
+          };
+        }
+
+        if (subcomponent.type === MessageComponentTypes.ChannelSelect) {
+          return {
+            type: subcomponent.type,
+            custom_id: subcomponent.customId,
+            placeholder: subcomponent.placeholder,
+            min_values: subcomponent.minValues,
+            max_values: subcomponent.maxValues,
+            channel_types: subcomponent.channelTypes,
           };
         }
 
